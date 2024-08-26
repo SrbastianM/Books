@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:web_flutter/src/pages/detail.dart';
-import 'package:web_flutter/src/pages/home.dart';
+import 'package:web_flutter/src/presentation/pages/detail.dart';
+import 'package:web_flutter/src/presentation/pages/home.dart';
 
 final appRouter = GoRouter(
   routes: [
