@@ -23,13 +23,16 @@ class _ListCharacterState extends State<ListCharacter> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return BlocBuilder<BookBloc, BookState>(builder: (context, state) {
       if (state is BookLoading) {
         return const Center(
           child: CircularProgressIndicator(),
         );
       } else if (state is BookLoaded) {
-        return _buildBookList(state.books);
+        return screenWidth < 600
+            ? _buildBookMobileList(state.books)
+            : _buildBookWeb(state.books);
       } else if (state is BookError) {
         return Center(
           child: Text('Error: {$state.message}'),
@@ -42,7 +45,25 @@ class _ListCharacterState extends State<ListCharacter> {
     });
   }
 
-  Widget _buildBookList(List<Book> books) {
+  Widget _buildBookWeb(List<Book> books) {
+    return Container(
+      height: 250.0,
+      padding: const EdgeInsets.all(20),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: books.length,
+        itemBuilder: (context, index) {
+          final book = books[index];
+          return Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: _buildBookItemWeb(book),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildBookMobileList(List<Book> books) {
     return Expanded(
       child: ListView(
         scrollDirection: Axis.horizontal,
@@ -54,13 +75,14 @@ class _ListCharacterState extends State<ListCharacter> {
   Widget _buildBookItem(Book book) {
     return Column(
       children: [
+        const Padding(padding: EdgeInsets.only(top: 20)),
         ClipRRect(
           borderRadius: BorderRadius.circular(18.0),
           child: Image.network(
             book.imageUrl, // Usa la URL de la imagen del libro
-            height: 150.0,
-            width: 100.0,
             fit: BoxFit.cover,
+            height: 200,
+            width: 100,
           ),
         ),
         const SizedBox(height: 8.0),
@@ -76,6 +98,72 @@ class _ListCharacterState extends State<ListCharacter> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
+      ],
+    );
+  }
+
+  Widget _buildBookItemWeb(Book book) {
+    return Row(
+      children: [
+        const Padding(padding: EdgeInsets.only(top: 20)),
+        SizedBox(
+          height: 200.0, // Ajusta la altura según sea necesario
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Contenedor para la imagen
+                Container(
+                  width: 150.0, // Ajusta el ancho según sea necesario
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(18.0),
+                    child: Image.network(
+                      book.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                // Contenedor para la información del libro
+                SizedBox(
+                  width: 200.0, // Ajusta el ancho según sea necesario
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        book.title,
+                        style: titleStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        book.author,
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 14.0),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Spacer(),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            book.description,
+                            style: const TextStyle(
+                                color: Colors.white70, fontSize: 14.0),
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
