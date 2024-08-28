@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_flutter/src/data/dio_service.dart';
 import 'package:web_flutter/src/presentation/blocs/blocs.dart';
 import 'package:web_flutter/src/router/router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +15,7 @@ class BlocsProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => DetailCubit()),
+        BlocProvider(create:  (context) => BookBloc(dioService: DioService())..add(FetchBooks())),
       ],
       child: const MyApp(),
     );
