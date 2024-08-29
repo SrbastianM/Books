@@ -14,6 +14,8 @@ class ListCharacter extends StatefulWidget {
 class _ListCharacterState extends State<ListCharacter> {
   final titleStyle = const TextStyle(
       fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white);
+  final titleStyleMobile = const TextStyle(
+      fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white);
 
   @override
   void initState() {
@@ -32,7 +34,7 @@ class _ListCharacterState extends State<ListCharacter> {
       } else if (state is BookLoaded) {
         return screenWidth < 600
             ? _buildBookMobileList(state.books)
-            : _buildBookWeb(state.books);
+            : _buildBookWebList(state.books);
       } else if (state is BookError) {
         return Center(
           child: Text('Error: {$state.message}'),
@@ -45,7 +47,7 @@ class _ListCharacterState extends State<ListCharacter> {
     });
   }
 
-  Widget _buildBookWeb(List<Book> books) {
+  Widget _buildBookWebList(List<Book> books) {
     return Container(
       height: 250.0,
       padding: const EdgeInsets.all(20),
@@ -64,39 +66,53 @@ class _ListCharacterState extends State<ListCharacter> {
   }
 
   Widget _buildBookMobileList(List<Book> books) {
-    return Expanded(
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: books.map((book) => _buildBookItem(book)).toList(),
-      ),
+    return Column(
+      children: [
+        const SizedBox(
+          height: 10.0,
+        ),
+        Text(
+          "Portraits",
+          style: titleStyle,
+        ),
+        SizedBox(
+          height: 220.0,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 8,
+            itemBuilder: (context, index) {
+              final book = books[index];
+              return Padding(
+                padding:
+                    const EdgeInsets.only(left: 8.0, right: 16.0, top: 10.0),
+                child: _buildBookItemMobile(book),
+              );
+            },
+          ),
+        ),
+        const Divider(
+          thickness: 1,
+          color: Color.fromARGB(255, 62, 62, 62),
+        ),
+      ],
     );
   }
 
-  Widget _buildBookItem(Book book) {
+  Widget _buildBookItemMobile(Book book) {
     return Column(
       children: [
-        const Padding(padding: EdgeInsets.only(top: 20)),
+        const Padding(
+            padding: EdgeInsets.only(
+          left: 20.0,
+        )),
         ClipRRect(
-          borderRadius: BorderRadius.circular(18.0),
+          borderRadius: BorderRadius.circular(12.0),
           child: Image.network(
-            book.imageUrl, // Usa la URL de la imagen del libro
+            book.imageUrl ?? "Not Found", // Usa la URL de la imagen del libro
             fit: BoxFit.cover,
             height: 200,
             width: 100,
           ),
-        ),
-        const SizedBox(height: 8.0),
-        Text(
-          book.title,
-          style: titleStyle,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          book.author,
-          style: const TextStyle(color: Colors.white70, fontSize: 12.0),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -114,7 +130,7 @@ class _ListCharacterState extends State<ListCharacter> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Contenedor para la imagen
-                Container(
+                SizedBox(
                   width: 150.0, // Ajusta el ancho según sea necesario
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(18.0),

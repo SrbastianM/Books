@@ -17,10 +17,10 @@ class Book {
   //Create a factoryu to made a Book for a Json
   factory Book.fromJson(Map<String, dynamic> json) {
     return Book(
-      title: json['bookTitle'] as String,
-      author: json['bookAuthor'] as String,
-      description: json['bookDescription'] as String,
-      imageUrl: json['bookImage'] as String,
+      title: json['bookTitle'] ?? "",
+      author: json['bookAuthor'] ?? "",
+      description: json['bookDescription'] ?? "",
+      imageUrl: json['bookImage'] ?? "",
     );
   }
 

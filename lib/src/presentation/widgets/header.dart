@@ -14,6 +14,7 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.all(25.0),
@@ -24,8 +25,8 @@ class Header extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("One Piece", style: titleStyleText),
-            Text("the series", style: subTitleStyleText)
+            Text("Bookis", style: titleStyleText),
+            Text("Found What You Want", style: subTitleStyleText)
           ],
         ),
         Row(
@@ -34,7 +35,7 @@ class Header extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(.1),
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               ),
               child: IconButton(
                 icon: const Icon(Icons.search),
@@ -47,7 +48,7 @@ class Header extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(.1),
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               ),
               child: IconButton(
                 icon: const Icon(Icons.notifications),

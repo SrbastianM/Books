@@ -13,20 +13,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.black,
       body: Column(
         children: [
-          const Header(),
-          const ListCharacter(),
-          const Text("Home"),
-          ElevatedButton(
-            onPressed: () {
-              context.go("/detail");
-            },
-            child: const Text("Detail"),
-          ),
-        ],
+           Header(),
+           ListCharacter() 
+        ]
       ),
     );
   }

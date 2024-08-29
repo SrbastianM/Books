@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: "One Piece ",
+      title: "Bookis",
       routerConfig: appRouter,
     );
   }
