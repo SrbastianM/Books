@@ -10,11 +10,11 @@ class BookLoading extends BookState {}
 
 class BookLoaded extends BookState {
   final List<Book> books;
-
-  BookLoaded(this.books);
+  final List<Book> booksDetails;
+  BookLoaded(this.books, this.booksDetails);
 
   @override
-  List<Object> get props => [books];
+  List<Object> get props => [books, booksDetails];
 }
 
 class BookError extends BookState {
@@ -24,4 +24,3 @@ class BookError extends BookState {
   @override
   List<Object> get props => [message];
 }
-

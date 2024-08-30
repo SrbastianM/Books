@@ -16,6 +16,11 @@ class _ListCharacterState extends State<ListCharacter> {
       fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white);
   final titleStyleMobile = const TextStyle(
       fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white);
+  final descriptionStyleMobile = const TextStyle(
+    fontSize: 8.0,
+    fontWeight: FontWeight.bold,
+    color: Colors.white70,
+  );
 
   @override
   void initState() {
@@ -33,8 +38,13 @@ class _ListCharacterState extends State<ListCharacter> {
         );
       } else if (state is BookLoaded) {
         return screenWidth < 600
-            ? _buildBookMobileList(state.books)
-            : _buildBookWebList(state.books);
+            ? Column(
+                children: [
+                  _buildBookMobileList(state.books),
+                  _buildBookDetailList(state.books)
+                ],
+              )
+            : Column(children: [_buildBookWebList(state.books)]);
       } else if (state is BookError) {
         return Center(
           child: Text('Error: {$state.message}'),
@@ -58,7 +68,7 @@ class _ListCharacterState extends State<ListCharacter> {
           final book = books[index];
           return Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: _buildBookItemWeb(book),
+            child: _buildBookCoverWeb(book),
           );
         },
       ),
@@ -85,7 +95,7 @@ class _ListCharacterState extends State<ListCharacter> {
               return Padding(
                 padding:
                     const EdgeInsets.only(left: 8.0, right: 16.0, top: 10.0),
-                child: _buildBookItemMobile(book),
+                child: _buildBookCoverMobile(book),
               );
             },
           ),
@@ -98,7 +108,7 @@ class _ListCharacterState extends State<ListCharacter> {
     );
   }
 
-  Widget _buildBookItemMobile(Book book) {
+  Widget _buildBookCoverMobile(Book book) {
     return Column(
       children: [
         const Padding(
@@ -118,7 +128,101 @@ class _ListCharacterState extends State<ListCharacter> {
     );
   }
 
-  Widget _buildBookItemWeb(Book book) {
+  Widget _buildBookDetailList(List<Book> books) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      height: 450,
+      width: screenWidth,
+      padding: const EdgeInsets.only(left: 20),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 500,
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: 15,
+                itemBuilder: (context, index) {
+                  final book = books[index];
+                  return _buildBookDetail(book);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBookDetail(Book book) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      height: 100,
+      width: screenWidth,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: const Color.fromARGB(66, 43, 43, 43),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(boxShadow: const [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 2,
+                  ),
+                ], borderRadius: BorderRadius.circular(6.0)),
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                  height: 100,
+                  width: 60,
+                  child: Image.network(
+                    book.imageUrl,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    book.title,
+                    style: titleStyleMobile,
+                  ),
+                  SizedBox(
+                    width: 150,
+                    child: RichText(
+                      text: TextSpan(
+                          text: book.description,
+                          style: descriptionStyleMobile),
+                      maxLines: 4,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.more_vert_rounded,
+              color: Colors.grey,
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBookCoverWeb(Book book) {
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(top: 20)),

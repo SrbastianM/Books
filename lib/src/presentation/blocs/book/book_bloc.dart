@@ -15,8 +15,9 @@ class BookBloc extends Bloc<BookEvent, BookState> {
 
     try {
       final books = await dioService.fetchBooks();
-      emit(BookLoaded(books));
-    } catch (e){
+      final bookDetails = await dioService.fetchBooks();
+      emit(BookLoaded(books, bookDetails));
+    } catch (e) {
       emit(BookError(e.toString()));
     }
   }
